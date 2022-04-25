@@ -1,4 +1,123 @@
 <!DOCTYPE html>
-<html lang="tr">
-<meta http-equiv="Refresh" content="0; url='https://###.createapps.site'" />
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    <meta name="theme-color" content="green">
+    <link rel="apple-touch-icon" href="/appicons/apple-touch-icon-152x152.png">
+    <link rel="manifest" href="/manifest.json">
+
+    <link href="/favicon.ico" rel="shortcut icon">
+  
+    <title>Sahte E-posta Oluşturucu</title>
+  
+    <link href="https://cdn.jsdelivr.net/gh/hung1001/font-awesome-pro@0ac23ca/css/all.css" rel="stylesheet" type="text/css"/>
+    
+    <link href="/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/css/style.css" rel="stylesheet" type="text/css"/>
+    <link href="/assets/css/notyf.min.css" rel="stylesheet" type="text/css"/>
+  
+    <script src="/assets/js/1secmail-api.js" type="text/javascript"></script>
+    <script src="/assets/js/vue.global.prod.min.js" type="text/javascript"></script>
+
+    <script src="assets/js/script.js"></script>
+
+
+    
+</head>
+<body>
+    
+    <div class="container p-3" id="app">
+      
+        <h3 class="my-5 text-center"> Ücretsiz Geçici E-posta Hizmeti </h3>
+
+        <div class="row">
+
+            <div class="col-md-8 px-lg-5 px-sm-4 py-2 mx-auto border border-2">
+                <div class="row my-2">
+                  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-center">
+                      <h5>
+                        Geçici E-posta Adresiniz
+                      </h5>
+                  </div>
+                </div>
+                <div class="row my-4 border rounded">
+                    <div class="input-group py-2">
+                        <input type="text" class="form-control text-end" v-model="mail_addr">
+                        <span class="input-group-text bg-white"><i class="fad fa-at"></i></span>
+                        <select class="form-select" v-model="mail_domain" @change="test">
+                            <option v-for="domain in available_domains">{{domain}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-8 mx-auto text-center py-2 border border-1">
+                <button class="btn btn-sm btn-primary mx-1" @click="CopyToClipBoard" title="e-posta adresini panoya kopyala">
+                    <i class="fal fa-copy"></i> Kopyala
+                </button> 
+                <button class="btn btn-sm btn-primary mx-1" @click="randomMailAddr" title="e-posta adresini değiştir">
+                    <i class="fal fa-edit"></i> Değiştir
+                </button> 
+                <button class="btn btn-sm btn-primary mx-1" @click="fetchInbox" title="yeni e-postalar için gelen kutusunu yenile">
+                    <i class="fad fa-sync-alt"></i> Yenile
+                </button>
+            </div>
+
+            <div class="px-0 mt-5 mx-auto border border-3">
+                <div v-if="viewEmail.id !== undefined" class="mx-1 my-2 p-2 border border-primary border-4 bg-white" v-html="viewEmail.body">
+                    
+                </div>
+                
+                <div class="table-responsive" v-if="inbox.length !== 0">
+                  <table class="table table-responsive table-bordered text-center">
+                      <thead>
+                          <tr>
+                              <th>Gönderen</th>
+                              <th></th>
+                              <th>Zaman</th>
+                              <th>Posta içeriğini görüntüle</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <tr v-for="mail in inbox" :key="mail.id" :class="mail.id === viewEmail.id ? 'bg-info' : ''">
+                              <td>{{mail.from}}</td>
+                              <td>{{mail.subject}}</td>
+                              <td>{{mail.date}}</td>
+                              <td>
+                                  <i class="fa" :class="mail.id !== viewEmail.id ? 'fa-eye' : 'fa-eye-slash'" @click="ToggleMailView(mail.id)"></i>
+                              </td>
+                          </tr>
+                      </tbody>
+                  </table> 
+                </div>
+                
+                <div class="py-3 text-center" v-else>
+                    <h4 class="my-2">Gelen Kutusu Boş</h4>
+                    <h6 class="my-3">Yeni E-postalar Aranıyor</h6>
+                    <div class="spinner-border text-success">
+                        <span class="visually-hidden">Yükleniyor...</span>
+                    </div>
+                </div>
+        
+            </div>
+
+        </div>
+      
+      
+        <div class="row mt-5 p-3 border border-3 border-success rounded">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-center">
+                <h5 class="text-primary"> Tek Kullanımlık Geçici E-posta Nedir? </h5>
+                <p>Tek kullanımlık e-posta - belirli bir süre geçtikten sonra kendi kendini imha eden geçici bir adresten e-posta almayı sağlayan ücretsiz bir e-posta hizmetidir. Ayrıca tempmail, 10minutemail, 10minmail, savurgan e-posta, sahte-posta, sahte e-posta oluşturucu, yakıcı posta veya çöp postası gibi isimlerle de bilinir. Birçok forum, Wi-Fi sahibi, web sitesi ve blog, ziyaretçilerden içeriği görüntüleyebilmeleri, yorum yazabilmeleri veya bir şey indirebilmeleri için kaydolmalarını ister. Temp-Mail - istenmeyen postalardan kaçınmanıza ve güvende kalmanıza yardımcı olan en gelişmiş atılabilir e-posta hizmetidir.</p>
+            </div>
+        </div>
+
+    </div>
+
+</body>
 </html>
+<script src="assets/js/notyf.min.js"></script>
+<script src="assets/js/app.js"></script>
